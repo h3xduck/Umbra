@@ -1,1 +1,0 @@
-cmd_/home/marsanpat/Umbra/main.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id  -T ./scripts/module-common.lds -o /home/marsanpat/Umbra/main.ko /home/marsanpat/Umbra/main.o /home/marsanpat/Umbra/main.mod.o;  true

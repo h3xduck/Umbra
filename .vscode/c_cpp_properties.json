@@ -1,0 +1,27 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include",
+                "/usr/local/include",
+                "/usr/src/linux-hwe-5.4-headers-5.4.0-72/include/**",
+                "/usr/src/linux-headers-5.4.0-72-generic/include/**",
+                "/usr/src/linux-headers-5.4.0-42-generic/include/**",
+                "/usr/src/linux-headers-5.4.0-72-generic/arch/x86/include/generated/",
+                "/usr/lib/gcc/x86_64-linux-gnu/7.5.0/include",
+                "/usr/src/linux-headers-5.4.0-72-generic/arch/x86/include/"
+            ],
+            "defines": [
+                "__GNUC__",
+                "__KERNEL__"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

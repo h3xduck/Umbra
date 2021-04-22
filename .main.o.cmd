@@ -3,6 +3,7 @@ cmd_/home/marsanpat/Umbra/main.o := gcc -Wp,-MD,/home/marsanpat/Umbra/.main.o.d 
 source_/home/marsanpat/Umbra/main.o := /home/marsanpat/Umbra/main.c
 
 deps_/home/marsanpat/Umbra/main.o := \
+    $(wildcard include/config/x86/64.h) \
   include/linux/kconfig.h \
     $(wildcard include/config/cpu/big/endian.h) \
     $(wildcard include/config/booger.h) \
@@ -54,7 +55,6 @@ deps_/home/marsanpat/Umbra/main.o := \
   arch/x86/include/asm/nops.h \
     $(wildcard include/config/mk7.h) \
     $(wildcard include/config/x86/p6/nop.h) \
-    $(wildcard include/config/x86/64.h) \
   include/linux/kasan-checks.h \
   include/linux/init.h \
     $(wildcard include/config/have/arch/prel32/relocations.h) \

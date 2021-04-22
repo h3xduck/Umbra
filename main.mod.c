@@ -30,13 +30,13 @@ __used __section(__versions) = {
 	{ 0xc8f162c9, "ftrace_set_filter_ip" },
 	{ 0xe007de41, "kallsyms_lookup_name" },
 	{ 0xdecd0b29, "__stack_chk_fail" },
-	{ 0xc5850110, "printk" },
 	{ 0x2ea2c95c, "__x86_indirect_thunk_rax" },
 	{ 0x24428be5, "strncpy_from_user" },
 	{ 0xbdfb6dbb, "__fentry__" },
+	{ 0xc5850110, "printk" },
 };
 
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "440FDC4074227CA29D664AD");
+MODULE_INFO(srcversion, "17EFEA8D3299EB2BB8C918B");

@@ -3,7 +3,6 @@
 
 //#define CONFIG_FUNCTION_TRACER 0
 
-#include <linux/ftrace.h>
 #include <linux/version.h>
 #include <asm/ftrace.h>
 #include <linux/uaccess.h>
@@ -11,6 +10,7 @@
 #include <linux/kernel.h>
 #include <linux/linkage.h>
 #include <linux/module.h>
+#include <linux/ftrace.h>
 
 
 //If x64, we prepend a __x64_ to the syscall name since that's the format on the syscall table
@@ -53,14 +53,20 @@ static int resolve_hook_address (struct ftrace_hook *hook){
 
 static void notrace ftrace_thunk(unsigned long ip, unsigned long parent_ip, struct ftrace_ops *ops, struct pt_regs *regs){
     struct ftrace_hook *hook = container_of(ops, struct ftrace_hook, ops);
+    //If we hook a syscall and we triggered it ourselves, we could hook the hook recursively.
+    //We check we are not in the parent tree of the call.
     if (!within_module(parent_ip, THIS_MODULE)){
+        printk(KERN_INFO "UMBRA:: The one time\n");
 		regs->ip = (unsigned long) hook->function;
 	}
+    printk(KERN_INFO "UMBRA:: THUNK\n");
 		
 }
 
 int install_hook(struct ftrace_hook *hook){
-    int err = resolve_hook_address(hook);
+    int err;
+    printk(KERN_INFO "UMBRA:: Installing hook %s\n", hook->name);
+    err = resolve_hook_address(hook);
     if(err){
 		printk(KERN_DEBUG "UMBRA:: Could not resolv hook address on install_hook()\n");
 		return err;

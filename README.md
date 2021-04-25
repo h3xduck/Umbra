@@ -5,7 +5,7 @@
 
 # Umbra
 
-Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up to 5.7) which can be used to spawn a netcat reverse shells to remote hosts and more.
+Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up to 5.7) which can be used to spawn netcat reverse shells to remote hosts and more.
 
 The rootkit is still under development, although the features listed below are already fully operational.
 
@@ -14,7 +14,7 @@ Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 1
 ## Features
 * Privilege escalation by sending signal 50
 * Start netcat reverse shell on module load.
-* Spawn netcat reverse shell to chosen remote host by sending signal 51.
+* Spawn netcat reverse shell to a remote host by sending signal 51.
 
 More functionalities will come in later updates.
 

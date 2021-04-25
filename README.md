@@ -12,7 +12,7 @@ The rootkit is still under development, although the features listed below are a
 Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 18.04.
 
 ## Features
-* Privilege scalation by sending signal 50
+* Privilege escalation by sending signal 50
 * Start netcat reverse shell on module load.
 * Spawn netcat reverse shell to chosen remote host by sending signal 51.
 
@@ -21,7 +21,7 @@ More functionalities will come in later updates.
 ## Disclaimer
 This rookit is **purely for educational purposes**. I am not responsible for any damage resulting from its unintended use.
 
-Also bear in mind that Umbra does not incorporate any hiding or protection mechanisms yet.
+Also bear in mind that Umbra does not incorporate any rootkit hiding or protection mechanisms yet.
 
 **IMPORTANT:** If you are going to test this rootkit in your own machine, I *strongly recommend* to use a VM. 
 

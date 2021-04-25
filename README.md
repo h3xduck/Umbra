@@ -89,4 +89,4 @@ Some rootkit references:
 * https://github.com/f0rb1dd3n/Reptile
 
 ## License
-This project is licensed under the GPLv2 license. See [LICENSE]([LICENSE](https://github.com/marsan27/Umbra/blob/master/LICENSE)
+This project is licensed under the GPLv2 license. See [LICENSE](https://github.com/marsan27/Umbra/blob/master/LICENSE)

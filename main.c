@@ -21,7 +21,7 @@
 #endif
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("marsan27 marcossbajo@gmail.com");
+MODULE_AUTHOR("h3xduck marcossbajo@gmail.com");
 MODULE_DESCRIPTION("UMBRA LKM");
 MODULE_VERSION("1");
 

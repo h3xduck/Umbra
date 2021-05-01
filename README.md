@@ -1,7 +1,7 @@
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/marsan27/Umbra?include_prereleases)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/h3xduck/Umbra?include_prereleases)
 ![Maintainability](https://img.shields.io/static/v1?label=maintainability&message=C&color=green)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/marsan27/Umbra)
-![GitHub last commit](https://img.shields.io/github/last-commit/marsan27/Umbra)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/h3xduck/Umbra)
+![GitHub last commit](https://img.shields.io/github/last-commit/h3xduck/Umbra)
 
 # Umbra
 
@@ -35,7 +35,7 @@ apt install linux-headers-$(uname -r)
 
 3. Clone the project
 ```
-git clone https://github.com/marsan27/Umbra.git
+git clone https://github.com/h3xduck/Umbra.git
 cd Umbra
 ```
 4. Build Umbra
@@ -89,4 +89,4 @@ Some rootkit references:
 * https://github.com/f0rb1dd3n/Reptile
 
 ## License
-This project is licensed under the GPLv2 license. See [LICENSE](https://github.com/marsan27/Umbra/blob/master/LICENSE)
+This project is licensed under the GPLv2 license. See [LICENSE](https://github.com/h3xduck/Umbra/blob/master/LICENSE)

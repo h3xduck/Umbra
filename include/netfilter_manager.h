@@ -8,6 +8,8 @@
 #include <linux/tcp.h>
 #include <linux/module.h>
 #include <linux/version.h>
+#include <linux/ip.h>
+#include <linux/tcp.h>
 
 //unsigned int nf_hookfn(unsigned int hook_num, struct sk_buff *skb, const struct net_device *in, const struct net_device *out, int (*okfn)(struct sk_buff *));
 

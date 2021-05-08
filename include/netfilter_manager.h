@@ -7,18 +7,21 @@
 #include <linux/ip.h>
 #include <linux/tcp.h>
 #include <linux/module.h>
+#include <linux/version.h>
 
-
-typedef unsigned int net_hook(unsigned int hook_num, struct sk_buff *skb, const struct net_device *in, const struct net_device *out, int (*okfn)(struct sk_buff *));
+//unsigned int nf_hookfn(unsigned int hook_num, struct sk_buff *skb, const struct net_device *in, const struct net_device *out, int (*okfn)(struct sk_buff *));
 
 //Netfilter hook options. Newer versions require building the struct ourselves
-struct def_nf_hook_ops {
+/*struct def_nf_hook_ops {
 	struct list_head list;
-    net_hook *hook; //Function to be called
+    nf_hookfn *hook; //Function to be called
 	struct module *owner;
 	u_int8_t pf;
 	unsigned int hooknum;
 	int priority;
-};
+};*/
+
+int register_netfilter_hook(void);
+void unregister_netfilter_hook(void);
 
 #endif

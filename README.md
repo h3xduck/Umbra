@@ -75,10 +75,12 @@ kill -51 1
 
 Note: Umbra also tries to start the reverse shell on load.
 
-### Spawn reverse shell via backdoor
+### **NEW**: Spawn reverse shell via backdoor
 Any host can get a reverse shell by sending a specially-crafted packet to a machine infected with Umbra. The backdoor will try to open the shell on IP:5888, where IP is the IP address of the attacking machine.
 
-You can look at the code to build your own packet, but we also provide a client which will do the job for you. You can download the client from [latest releases](https://github.com/h3xduck/Umbra/releases/).
+You can look at the code to know how to build your own packet, but I also provide a client which will do the job for you. You can download the client from [latest releases](https://github.com/h3xduck/Umbra/releases/), or you can build your own using my library [RawTCP](https://github.com/h3xduck/RawTCP_Lib).
+
+![Backdoor in action](https://github.com/h3xduck/Umbra/blob/magic_packets/images/umbrabackdoor.gif)
 
 
 

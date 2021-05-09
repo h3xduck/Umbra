@@ -26,5 +26,4 @@ void execute_reverse_shell(struct work_struct *work);
  */ 
 int start_reverse_shell(char* ip, char* port);
 
-
 #endif

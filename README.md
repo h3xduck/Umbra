@@ -1,19 +1,20 @@
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/h3xduck/Umbra?include_prereleases)
-![Maintainability](https://img.shields.io/static/v1?label=maintainability&message=C&color=green)
+![Maintainability](https://img.shields.io/static/v1?label=maintainability&message=B&color=green)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/h3xduck/Umbra)
 ![GitHub last commit](https://img.shields.io/github/last-commit/h3xduck/Umbra)
 
 # Umbra
 
-Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up to 5.7) which can be used to spawn netcat reverse shells to remote hosts and more.
+Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up to 5.7) which opens a network backdoor that spawns reverse shells to remote hosts and more.
 
 The rootkit is still under development, although the features listed below are already fully operational.
 
 Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 18.04.
 
 ## Features
-* Privilege escalation by sending signal 50
-* Start netcat reverse shell on module load.
+* **NEW**: Backdoor which spawns reverse shell to remote IP after receiving specially crafter TCP packet.
+* Privilege escalation by sending signal 50.
+* Spawn netcat reverse shell on module load.
 * Spawn netcat reverse shell to a remote host by sending signal 51.
 
 More functionalities will come in later updates.
@@ -42,7 +43,7 @@ cd Umbra
 ```
 make
 ```
-1. Load Umbra in the kernel
+5. Load Umbra in the kernel
 ```
 sudo insmod ./umbra.ko
 ```
@@ -73,6 +74,17 @@ kill -51 1
 <img src="images/kill51screenshot.png" width = 800/>
 
 Note: Umbra also tries to start the reverse shell on load.
+
+### Spawn reverse shell via backdoor
+Any host can get a reverse shell by sending a specially-crafted packet to a machine infected with Umbra. The backdoor will try to open the shell on IP:5888, where IP is the IP address of the attacking machine.
+
+The packet must meet the following criteria:
+* Uses TCP protocol
+* Sent to port 9000, where backdoor listens
+* Payload starts with string UMBRA_PAYLOAD_GET_REVERSE_SHELL
+
+Example of execution:
+
 
 
 ## References

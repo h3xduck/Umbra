@@ -5,7 +5,6 @@ umbra-objs :=  main.o src/ftrace_manager.o src/creds_manager.o src/hookers.o src
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
-	gcc client/client.c lib/libRawTCP_Lib.a -o client/client
 
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean

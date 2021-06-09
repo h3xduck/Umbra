@@ -1,0 +1,8 @@
+.vscode
+client/client.o
+kernel/*.*
+kernel/src/*.*
+!kernel/src/*.c
+!kernel/*.c
+
+

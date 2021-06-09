@@ -1,4 +1,4 @@
-#include "../lib/RawTCP.h"
+#include "lib/RawTCP.h"
 #include <stdio.h>
 
 void main(int argc, char* argv[]){

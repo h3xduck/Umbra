@@ -3,7 +3,7 @@
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/h3xduck/Umbra)
 ![GitHub last commit](https://img.shields.io/github/last-commit/h3xduck/Umbra)
 
-# Umbra
+# Umbra <img src="images/umbraicon2.png" float="right" width = 50>
 
 Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up to 5.7) which opens a network backdoor that spawns reverse shells to remote hosts and more.
 

@@ -23,6 +23,7 @@ Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 1
   * Hide/unhide rootkit remotely.
     
 <img src="images/umbrainjector.png" width = 800/>
+
 * **NEW**: Umbra hides all its files and directories from user commands such as *ls*.
 * **NEW**: Umbra can hide/unhide itself remotely and locally via signals.
 

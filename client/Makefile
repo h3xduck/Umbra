@@ -3,14 +3,14 @@ HEADERS = lib/RawTCP.h
 EXTRA_CFLAGS= -I$(PWD)/lib
 
 default:
-	make client
+	make injector
 
 client.o: client.c $(HEADERS)
 	gcc -c client.c
 
-client: client.o lib/libRawTCP_Lib.a
-	gcc -lm -o client client.o -L. lib/libRawTCP_Lib.a
+injector: client.o lib/libRawTCP_Lib.a
+	gcc -lm -o injector client.o -L. lib/libRawTCP_Lib.a
 
 clean:
 	-rm -f client.o
-	-rm -f client
+	-rm -f injector

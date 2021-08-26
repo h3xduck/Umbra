@@ -141,7 +141,7 @@ You can see the full information on how to run the client by:
 ## References
 The development of this rootkit involved a substantial amount of research about LKMs and rootkit techniques. The following is an incomplete list of the resources I used:
 How to create LKMs:
-* https://tldp.org/LDP/lkmpg/2.6/html/lkmpg.html
+* https://sysprog21.github.io/lkmpg/
 
 Linux syscall reference:
 * https://syscalls64.paolostivanin.com/

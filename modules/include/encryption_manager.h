@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <stdlib.h>
 
 /**
  * Operates over all files in the directory, recursively, decrypting or encrypting depending on mode.

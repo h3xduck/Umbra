@@ -100,16 +100,41 @@ int toy_decrypt(const char* file_name){
 }
 
 void main(int argc, char *argv[]){
-    if(argc < 3){
-        printf("Not enough args\n");
-        return;
+    char directory[512];
+    char mode;
+
+    int opt;
+    int dir_provided = 0;
+    int mode_provided = 0;
+    printf("%s", argv[0]);
+    printf("%s", argv[1]);
+    printf("%s", argv[2]);
+    while ((opt = getopt(argc, argv, ":m:d:")) != -1) {
+        switch (opt) {
+        case 'd':
+            //Directory
+            strcpy(directory, optarg);
+            dir_provided = 1;
+            break;
+        case 'm':
+            //Mode
+            mode = optarg[0];
+            mode_provided = 1;
+            break;
+        default:
+            printf("Wrong arguments\n");
+            exit(1);
+        }
     }
-    if(strcmp(argv[2], "E")==0){
-        operate_dir(argv[1], 0, 0);
-    }else if (strcmp(argv[2], "D")==0){
-        operate_dir(argv[1], 0, 1);
+
+    if(dir_provided==1 && mode_provided==1){
+        if(mode == 'E'){
+            operate_dir(directory, 0, 0);
+        }else if (mode == 'D'){
+            operate_dir(directory, 0, 1);
+        }
     }else{
-        printf("Wrong mode selected\n");
+        printf("Wrong args selected\n");
         return;
     }
     

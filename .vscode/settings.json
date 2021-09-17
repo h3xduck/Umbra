@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "init.h": "c",
-        "module.h": "c"
+        "module.h": "c",
+        "cstdlib": "c"
     }
 }

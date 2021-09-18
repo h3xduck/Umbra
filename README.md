@@ -22,8 +22,8 @@ Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 1
     
 <img src="images/umbrainjectorwithmodules.png" width = 800/>
 
-* **NEW**: Added the ***Umbra Modules***, special malware-like modules which enhance Umbra and can be launched remotely by the Umbra Injector.
-* **NEW**: Umbra module "***Ransom***" which turns Umbra into a remotely controllable ransomware.
+* **NEW:** Added the ***Umbra Modules***, special malware-like modules which enhance Umbra and can be launched remotely by the Umbra Injector.
+* **NEW:** Umbra module "***Ransom***" which turns Umbra into a remotely controllable ransomware.
 * Umbra hides all its files and directories from user commands such as *ls*.
 * Umbra can hide/unhide itself remotely and locally via signals.
 * Privilege escalation by sending signal 50.
@@ -39,7 +39,7 @@ Also bear in mind that Umbra only incorporates light hiding and protection mecha
 
 **IMPORTANT:** If you are going to test this rootkit in your own machine, I *strongly recommend* to use a VM. 
 
-**About the Umbra Modules:** The *ransom* module uses a trivial encryption mechanism but it can and will certainly encrypt any folder in your machine. Although files can be decrypted, I *definitely do not recommend* running this towards your root folder or similar unless on a controlled environment.
+**About the Umbra Modules:** The *ransom* module uses a trivial encryption mechanism but it can and will certainly encrypt any folder in your machine. Although files can be easily decrypted, I *definitely do not recommend* running this towards your root folder or similar unless on a controlled environment.
 
 ## Table of Contents
 1. [Build and Install](#build-and-install)

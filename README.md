@@ -67,12 +67,22 @@ cd Umbra
 ```
 make
 ```
-5. Load Umbra in the kernel
+5. Load Umbra in the kernel and configure environment
+The script will install Umbra in the kernel and configure a special directory where to store the malware modules. The directory will be later hidden by the rootkit.
+
+```
+sudo ./install.sh
+```
+
+If you have previously run the script and wish to just install Umbra in the kernel, you can run:
+
 ```
 sudo insmod ./umbra.ko
 ```
 
 ## Unloading Umbra
+Make sure Umbra is not in invisible mode, otherwise this will fail.
+
 ```
 sudo rmmod umbra
 ```

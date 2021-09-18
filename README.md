@@ -9,7 +9,7 @@ Umbra is an experimental remotely controllable LKM rootkit for kernels 4.x and 5
 
 The rootkit is still under development, although the features listed below are already fully operational.
 
-![Backdoor in action](https://github.com/h3xduck/Umbra/blob/ransomware/images/umbra4.0_1.gif)
+![Backdoor in action](https://github.com/h3xduck/Umbra/blob/master/images/umbra4.0_1.gif)
 
 Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 18.04.
 
@@ -25,7 +25,7 @@ Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 1
 * **NEW:** Added the ***Umbra Modules***, special malware-like modules which enhance Umbra and can be launched remotely by the Umbra Injector.
 * **NEW:** Umbra module "***Ransom***" which turns Umbra into a remotely controllable ransomware.
 
-![Ransom module in action](https://github.com/h3xduck/Umbra/blob/ransomware/images/umbra4.0_2.gif)
+![Ransom module in action](https://github.com/h3xduck/Umbra/blob/master/images/umbra4.0_2.gif)
 
 * Umbra hides all its files and directories from user commands such as *ls*.
 * Umbra can hide/unhide itself remotely and locally via signals.

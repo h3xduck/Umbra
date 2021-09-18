@@ -18,6 +18,7 @@ Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 1
 * :star2: Use the *Umbra Injector* to control the rootkit remotely:
   * Remote reverse shell.
   * Hide/unhide rootkit remotely.
+  * Launch *Umbra Modules*.
     
 <img src="images/umbrainjectorwithmodules.png" width = 800/>
 
@@ -46,7 +47,7 @@ Also bear in mind that Umbra only incorporates light hiding and protection mecha
 3. [Local Control](#basic-usage-local-control)
 4. [Remote Control](#umbra-injector-remote-control)
 5. [Umbra Modules](#umbra-modules)
-   ** [(NEW) Ransom](#ransom-module)
+   * [(NEW) Ransom](#ransom-module)
 6. [References](#references)
 
 ## Build and install

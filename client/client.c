@@ -26,22 +26,28 @@ void print_welcome_message(){
 }
 
 void print_help_dialog(const char* arg){
-    printf("\nUsage: %s [OPTION] victim_IP\n\n", arg);
+    printf("\nUsage: %s OPTION victim_IP\n\n", arg);
     printf("Program OPTIONs\n");
-    char* line = "-S victim_IP";
+    char* line = "-S";
     char* desc = "Get a remote shell to victim_IP";
-    printf("\t%-50s %-50s\n\n", line, desc);
-    line = "-u victim_IP";
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "-p [PATH] -e";
+    desc = "*Ransom module* Recursively encrypt directory PATH on victim_IP";
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "-p [PATH] -d";
+    desc = "*Ransom module* Recursively decrypt directory PATH on victim_IP";
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "-u";
     desc = "Unhide the rootkit remotely from the host";
-    printf("\t%-50s %-50s\n\n", line, desc);
-    line = "-i victim_IP";
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "-i";
     desc = "Hide the rootkit remotely from the host";
-    printf("\t%-50s %-50s\n\n", line, desc);
-    line = "\nProgram options";
-    printf("\t%-50s\n", line);
+    printf("\t%-40s %-50s\n\n", line, desc);
+    line = "\nOther options";
+    printf("\t%-40s\n", line);
     line = "-h";
     desc = "Print this help";
-    printf("\t%-50s %-50s\n\n", line, desc);
+    printf("\t%-40s %-50s\n\n", line, desc);
 
 }
 

